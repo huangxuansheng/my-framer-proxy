@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netlify Edge Proxy</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+        code {
+            background: #e0e0e0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Netlify Edge Function 代理演示</h1>
+        <p>这是一个简单的首页。</p>
+        <p>任何非根路径的请求 (例如 <code>/about</code>) 都将被代理到配置的目标网站。</p>
+        <p>当前配置的目标网站请查看 <code>netlify/edge-functions/proxy.js</code> 文件。</p>
+    </div>
+</body>
+</html>
