@@ -1,43 +1,62 @@
-// 将此 URL 替换为你想要代理的目标网站地址
-const TARGET_URL = "https://left-footprint-804914.framer.app/";
-
+// 代理函数 - 将请求转发到你的 Framer 网站
 export default async (request, context) => {
-  const url = new URL(request.url);
-  
-  // 如果是访问首页且存在 index.html，可以让 Netlify 处理静态文件（可选）
-  // 这里我们演示完全代理，或者拦截特定路径
-  // 如果你希望根路径显示 public/index.html，可以放行
-  if (url.pathname === "/" || url.pathname === "/index.html") {
-    return context.next();
-  }
-
-  // 构建目标 URL
-  const targetUrl = new URL(url.pathname + url.search, TARGET_URL);
-
-  // 可以在这里修改请求头，例如 Host
-  const headers = new Headers(request.headers);
-  headers.set("Host", targetUrl.host);
-  headers.set("X-Forwarded-Host", url.host);
-
   try {
-    const response = await fetch(targetUrl.toString(), {
+    // 你的 Framer 网站地址
+    const FRAMER_URL = 'https://left-footprint-804914.framer.app';
+    
+    // 获取请求的 URL
+    const url = new URL(request.url);
+    
+    // 构建目标 URL（保留路径和查询参数）
+    const targetUrl = new URL(FRAMER_URL);
+    targetUrl.pathname = url.pathname;
+    targetUrl.search = url.search;
+    
+    // 复制请求头
+    const headers = new Headers(request.headers);
+    
+    // 移除可能引起问题的请求头
+    headers.delete('host');
+    headers.delete('referer');
+    headers.delete('origin');
+    
+    // 添加必要的请求头
+    headers.set('host', 'left-footprint-804914.framer.app');
+    
+    // 准备请求选项
+    const requestOptions = {
       method: request.method,
       headers: headers,
-      body: request.body,
-      redirect: "manual", // 让客户端处理重定向
-    });
-
-    // 创建新的响应头
+      redirect: 'follow'
+    };
+    
+    // 如果不是 GET 请求，传递 body
+    if (request.method !== 'GET' && request.method !== 'HEAD') {
+      requestOptions.body = request.body;
+    }
+    
+    // 发起代理请求
+    const response = await fetch(targetUrl.toString(), requestOptions);
+    
+    // 复制响应头
     const responseHeaders = new Headers(response.headers);
     
-    // 如果需要，可以在这里修改响应头，例如处理 CORS 或 Cookie
-
+    // 修改响应头，确保正常工作
+    responseHeaders.set('access-control-allow-origin', '*');
+    responseHeaders.set('vary', 'Accept-Encoding');
+    
+    // 创建新的响应
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
-      headers: responseHeaders,
+      headers: responseHeaders
     });
+    
   } catch (error) {
-    return new Response(`Proxy Error: ${error.message}`, { status: 500 });
+    // 错误处理
+    return new Response(`代理错误: ${error.message}`, {
+      status: 500,
+      headers: { 'content-type': 'text/plain' }
+    });
   }
 };

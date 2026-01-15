@@ -1,6 +1,11 @@
 [build]
   publish = "public"
 
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/proxy/:splat"
+  status = 200
+
 [[edge_functions]]
   function = "proxy"
   path = "/*"

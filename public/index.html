@@ -1,35 +1,53 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>正在重定向到 Framer 网站</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netlify Edge Proxy</title>
     <style>
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            line-height: 1.5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
         .container {
-            background: #f5f5f5;
-            padding: 2rem;
-            border-radius: 8px;
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
         }
-        code {
-            background: #e0e0e0;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Netlify Edge Function 代理演示</h1>
-        <p>这是一个简单的首页。</p>
-        <p>任何非根路径的请求 (例如 <code>/about</code>) 都将被代理到配置的目标网站。</p>
-        <p>当前配置的目标网站请查看 <code>netlify/edge-functions/proxy.js</code> 文件。</p>
+        <div class="spinner"></div>
+        <h1>正在加载网站...</h1>
+        <p>如果长时间未跳转，请刷新页面或<a href="/" style="color: #fff; text-decoration: underline;">点击这里</a></p>
     </div>
+    <script>
+        // 自动重定向到实际内容
+        setTimeout(() => {
+            window.location.pathname = window.location.pathname === '/' ? '/home' : window.location.pathname;
+        }, 100);
+    </script>
 </body>
 </html>
